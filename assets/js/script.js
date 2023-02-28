@@ -23,6 +23,9 @@ let headers = {
 
 // For now, this is how I will generate a random ISBN number:
 
+// This is my list of ISBNs that I know are actually books;
+// Source for these books:
+// https://www.theguardian.com/news/datablog/2011/jan/01/top-100-books-of-all-time#data
 let RandomIsbn = [
     '9780061120084',
     '9780552149518',
@@ -127,19 +130,29 @@ let RandomIsbn = [
     '9781846053443',
 ]
 
-let randomIsbn = chooseRandomIsbn()
+// This function randomly selects an ISBN number from the list above
+let chooseRandomIsbn = function() {
+    let randomIsbn = RandomIsbn[Math.floor(Math.random() * RandomIsbn.length)]
+    return randomIsbn
+}
+
+
+// let randomIsbn = chooseRandomIsbn()
+
+const randomIsbn = '9780755309511'
+// console.log(randomIsbn)
 
 
 // requestUrl = `https://api2.isbndb.com/book/${randomIsbn}`
  
-fetch(requestUrl, {headers: headers})
-    .then(function (response) {
-        return response.json();
-    })
-    .then( function(data) {
-        console.log(data)
-    })
-    .catch(function (error) {
-        console.error('Error:', error)
-    });
+// fetch(requestUrl, {headers: headers})
+//     .then(function (response) {
+//         return response.json();
+//     })
+//     .then( function(data) {
+//         console.log(data)
+//     })
+//     .catch(function (error) {
+//         console.error('Error:', error)
+//     });
 
