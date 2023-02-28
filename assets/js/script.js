@@ -1,3 +1,7 @@
+// Global variables
+let suggestABook = document.querySelector('#suggest-a-book')
+let bookInfo = document.querySelector('#book-info')
+
 // Header info for API request
 let headers = {
     "Content-Type": 'application/json',
@@ -143,16 +147,35 @@ const randomIsbn = '9780755309511'
 // console.log(randomIsbn)
 
 
-// requestUrl = `https://api2.isbndb.com/book/${randomIsbn}`
- 
-// fetch(requestUrl, {headers: headers})
-//     .then(function (response) {
-//         return response.json();
-//     })
-//     .then( function(data) {
-//         console.log(data)
-//     })
-//     .catch(function (error) {
-//         console.error('Error:', error)
-//     });
 
+requestUrl = `https://api2.isbndb.com/book/${randomIsbn}`
+
+let fetchBookInfo = function() {
+    fetch(requestUrl, {headers: headers})
+        .then(function (response) {
+            return response.json();
+        })
+        .then( function(data) {
+            console.log(data);
+            updateWithBookInfo(data)
+        })
+        .catch(function (error) {
+            console.error('Error:', error)
+        });
+}
+
+let updateWithBookInfo = function(data) {
+    suggestABook.textContent = "Suggest Another Book!";
+    bookInfo.innerHTML = 
+        `<img src="${data.book.image}">
+        <h2>${data.book.title}</h2>
+        <h3>${data.book.authors[0]}</h3>
+        <p>${data.book.overview}</p>
+    `
+
+    data.book.image.style = 
+    "padding: 5px;border: 2px solid #f4511e;border-radius: 5px;";
+}
+
+
+suggestABook.addEventListener("click",fetchBookInfo)

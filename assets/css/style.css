@@ -1,0 +1,9 @@
+#suggest-a-book {
+    margin: 20px;
+}
+
+#book-cover {
+    padding: 5px;
+    border: 2px solid #f4511e;
+    border-radius: 5px;
+}
