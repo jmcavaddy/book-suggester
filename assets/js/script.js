@@ -129,16 +129,11 @@ let chooseRandomIsbn = function() {
 
 // let randomIsbn = chooseRandomIsbn()
 
-const randomIsbn = '9780395974681'
-// console.log(randomIsbn)
-
-
-
-let requestUrl = `https://api2.isbndb.com/book/${randomIsbn}`;
-// chooseRandomIsbn()
 
 // This function fetches the book info from the API
 let fetchBookInfo = function() {
+    
+    let requestUrl = chooseRandomIsbn();
     fetch(requestUrl, {headers: headers})
         .then(function (response) {
             return response.json();
