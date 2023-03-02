@@ -212,7 +212,7 @@ let updateWithBookInfo = function(data) {
         }
 
         // If there are no saved books, save the current book to localStorage
-        if (savedBooks === null) {
+        if (savedBooks === undefined) {
             savedBooks = {bookList: []};
             localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
             saveBookToLocalStorage(data);
