@@ -15,10 +15,13 @@ var savedBookCarousel = document.querySelector("#savedBooks-carousel");
 // Loop through saved books and add to carousel
 for (var i = 0; i < savedBooks.bookList.length; i++) {
     console.log(savedBooks.bookList[i].coverImage)
+    let title = savedBooks.bookList[i].title
+    let coverImage = savedBooks.bookList[i].coverImage
+    let authorName = savedBooks.bookList[i].authorName
     savedBookCarousel.innerHTML += 
-    `<a class="carousel-item" href="#${i+1}!"><img src="${savedBooks.bookList[i].coverImage}"></a>
+    `<a class="carousel-item" href="#${i+1}!">${title} by ${authorName}<img src="${coverImage}"></a>
     `
-    
+
 }
 
 

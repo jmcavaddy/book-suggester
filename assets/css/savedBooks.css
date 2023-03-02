@@ -1,3 +1,8 @@
 * {
     font-family: Arial, Helvetica, sans-serif;
 }
+
+.carousel-item {
+    color: #f4511e;
+    width: 45%;
+}
