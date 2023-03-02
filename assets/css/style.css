@@ -2,8 +2,15 @@
     margin: 20px;
 }
 
-#book-cover {
-    padding: 5px;
+
+.book-details {
+    padding: 5px -100px;
     border: 2px solid #f4511e;
     border-radius: 5px;
+    margin: 0px 25px 10px 25px;
+
+}
+
+.book-cover {
+    padding: 5px;
 }

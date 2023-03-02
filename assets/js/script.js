@@ -143,7 +143,7 @@ let chooseRandomIsbn = function() {
 
 // let randomIsbn = chooseRandomIsbn()
 
-const randomIsbn = '9780755309511'
+const randomIsbn = '9780395974681'
 // console.log(randomIsbn)
 
 
@@ -155,8 +155,7 @@ let fetchBookInfo = function() {
         .then(function (response) {
             return response.json();
         })
-        .then( function(data) {
-            console.log(data);
+        .then(function(data) {
             updateWithBookInfo(data)
         })
         .catch(function (error) {
@@ -165,16 +164,32 @@ let fetchBookInfo = function() {
 }
 
 let updateWithBookInfo = function(data) {
+    // Update the suggest a book button
     suggestABook.textContent = "Suggest Another Book!";
+
+    // The API returns the author's name as "Lastname, Firstname"
+    // This function returns it as "Firstname Lastname"
+    let createPrintedName = function (data) {
+        let nameArray = data.book.authors[0].split(", ");
+        let lastName = nameArray[0];
+        let firstName = nameArray[1];
+        let printedName = `${firstName} ${lastName}`;
+        return printedName;
+
+    }
+    let printedName = createPrintedName(data);
+
     bookInfo.innerHTML = 
-        `<img src="${data.book.image}">
-        <h2>${data.book.title}</h2>
-        <h3>${data.book.authors[0]}</h3>
-        <p>${data.book.overview}</p>
+        `<img class="book-details book-cover" src="${data.book.image}" alt="Book cover for ${data.book.title}">
+        <h2 class="book-details">Try ${data.book.title},</h2>
+        <h3 class="book-details">A novel by ${printedName}</h3>
+        <div class="book-details">
+            <p>Length: ${data.book.pages} pages.</p>
+            <p>Published by ${data.book.publisher} in ${data.book.date_published}</p>
+        </div>
     `
 
-    data.book.image.style = 
-    "padding: 5px;border: 2px solid #f4511e;border-radius: 5px;";
+
 }
 
 
