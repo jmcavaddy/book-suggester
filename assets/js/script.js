@@ -2,6 +2,15 @@
 let suggestABook = document.querySelector('#suggest-a-book')
 let bookInfo = document.querySelector('#book-info')
 
+// Initialize savedBooks
+
+var savedBooks = JSON.parse(localStorage.getItem("savedBooks"));
+
+if (typeof savedBooks === "undefined") {
+    localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
+}
+
+
 // Header info for API request
 let headers = {
     "Content-Type": 'application/json',
@@ -124,10 +133,6 @@ let chooseRandomIsbn = function() {
     return requestUrl
 }
 
-
-// let randomIsbn = chooseRandomIsbn()
-
-
 // This function fetches the book info from the API
 let fetchBookInfo = function() {
     
@@ -175,12 +180,7 @@ let updateWithBookInfo = function(data) {
 
 
     `
-
-
-
     let saveBookBtn = document.querySelector('#save-book')
-
-   
 
     // Add an event listener to the save book button
     saveBookBtn.addEventListener("click", function() {
@@ -191,9 +191,6 @@ let updateWithBookInfo = function(data) {
 
         // If it isn't, save it to localStorage and change button text to
         // "Book Saved!"
-        if (typeof !savedBooks === 'undefined') {
-            var savedBooks = JSON.parse(localStorage.getItem("savedBooks"));
-        }
 
         // Function to save book data to localStorage
         let saveBookToLocalStorage = function(data) {
@@ -204,14 +201,14 @@ let updateWithBookInfo = function(data) {
                 authorName: printedName,
             }
 
+            // Add to the array in the savedBooks object
             savedBooks.bookList.push(saveBookData)
 
             localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
         }
 
         // If there are no saved books, save the current book to localStorage
-        if (typeof savedBooks === 'undefined') {
-            savedBooks = {bookList: []};
+        if (savedBooks.bookList.length === 0) {
             saveBookToLocalStorage(data);
             saveBookBtn.textContent = "Book Saved!";
             saveBookBtn.classList.add("disabled");
