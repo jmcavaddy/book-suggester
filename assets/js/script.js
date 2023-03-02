@@ -200,6 +200,9 @@ let updateWithBookInfo = function(data) {
         // Function to save book data to localStorage
         let saveBookToLocalStorage = function(data) {
 
+            localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
+
+
             let saveBookData = {
                 title: data.book.title,
                 coverImage: data.book.image,
@@ -207,9 +210,8 @@ let updateWithBookInfo = function(data) {
             }
 
             savedBooks.bookList.push(saveBookData)
-
+            
             localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
-
         }
 
         // If there are no saved books, save the current book to localStorage
