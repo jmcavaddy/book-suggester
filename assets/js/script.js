@@ -213,7 +213,7 @@ let updateWithBookInfo = function(data) {
         }
 
         // If there are no saved books, save the current book to localStorage
-        if (savedBooks.bookList.length === 0) {
+        if (savedBooks === null) {
             saveBookToLocalStorage(data);
             saveBookBtn.textContent = "Book Saved!";
             saveBookBtn.classList.add("disabled");
