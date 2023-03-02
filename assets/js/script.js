@@ -1,8 +1,6 @@
 // Global variables
 let suggestABook = document.querySelector('#suggest-a-book')
 let bookInfo = document.querySelector('#book-info')
-// Initialize the savedBooks item in localStorage
-// localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
 
 // Header info for API request
 let headers = {
@@ -195,14 +193,13 @@ let updateWithBookInfo = function(data) {
         // "Book Saved!"
 
         // Get the saved books from localStorage
-        var savedBooks = JSON.parse(localStorage.getItem("savedBooks"));
 
         // Function to save book data to localStorage
         let saveBookToLocalStorage = function(data) {
 
-            localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
+            var savedBooks = JSON.parse(localStorage.getItem("savedBooks"));
 
-
+            
             let saveBookData = {
                 title: data.book.title,
                 coverImage: data.book.image,
@@ -210,12 +207,14 @@ let updateWithBookInfo = function(data) {
             }
 
             savedBooks.bookList.push(saveBookData)
-            
+
             localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
         }
 
         // If there are no saved books, save the current book to localStorage
         if (savedBooks === null) {
+            savedBooks = {bookList: []};
+            localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
             saveBookToLocalStorage(data);
             saveBookBtn.textContent = "Book Saved!";
             saveBookBtn.classList.add("disabled");
