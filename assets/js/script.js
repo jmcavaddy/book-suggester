@@ -1,6 +1,7 @@
 // Global variables
 let suggestABook = document.querySelector('#suggest-a-book')
 let bookInfo = document.querySelector('#book-info')
+let savedBooks = {bookList:[]}
 
 // Header info for API request
 let headers = {
@@ -28,7 +29,7 @@ let headers = {
 // For now, this is how I will generate a random ISBN number:
 
 // This is my list of ISBNs that I know are actually books;
-// Source for these books:
+// Source for this list:
 // https://www.theguardian.com/news/datablog/2011/jan/01/top-100-books-of-all-time#data
 let RandomIsbn = [
     '9780061120084',
@@ -137,7 +138,8 @@ let RandomIsbn = [
 // This function randomly selects an ISBN number from the list above
 let chooseRandomIsbn = function() {
     let randomIsbn = RandomIsbn[Math.floor(Math.random() * RandomIsbn.length)]
-    return randomIsbn
+    let requestUrl = `https://api2.isbndb.com/book/${randomIsbn}`
+    return requestUrl
 }
 
 
@@ -148,7 +150,8 @@ const randomIsbn = '9780395974681'
 
 
 
-requestUrl = `https://api2.isbndb.com/book/${randomIsbn}`
+let requestUrl = `https://api2.isbndb.com/book/${randomIsbn}`;
+// chooseRandomIsbn()
 
 let fetchBookInfo = function() {
     fetch(requestUrl, {headers: headers})
@@ -181,16 +184,43 @@ let updateWithBookInfo = function(data) {
 
     bookInfo.innerHTML = 
         `<img class="book-details book-cover" src="${data.book.image}" alt="Book cover for ${data.book.title}">
-        <h2 class="book-details">Try ${data.book.title},</h2>
-        <h3 class="book-details">A novel by ${printedName}</h3>
+        <h2>Try ${data.book.title},</h2>
+        <h3>a novel by ${printedName}</h3>
         <div class="book-details">
             <p>Length: ${data.book.pages} pages.</p>
             <p>Published by ${data.book.publisher} in ${data.book.date_published}</p>
+
         </div>
+        <a id="save-book" class="waves-effect waves-light btn red lighten-3"><i class="material-icons right">add</i>Add this book to your Saved Books!</a>
+
+
     `
 
+    let saveBookBtn = document.querySelector('#save-book')
+
+   
+
+    saveBookBtn.addEventListener("click", function() {
+        console.log("You clicked the save book button!");
+
+        let saveBookData = {
+            title: data.book.title,
+            coverImage: data.book.image,
+            authorName: printedName,
+            length: data.book.pages,
+        }
+
+        console.log(saveBookData)
+
+        savedBooks.bookList.push(saveBookData)
+
+        console.log(savedBooks.bookList)
+        
+        localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
+    });
 
 }
 
 
 suggestABook.addEventListener("click",fetchBookInfo)
+
