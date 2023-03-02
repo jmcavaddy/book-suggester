@@ -201,6 +201,16 @@ let updateWithBookInfo = function(data) {
    
 
     saveBookBtn.addEventListener("click", function() {
+
+        // Check localStorage to see if this book is already saved
+        // If it is, don't save it again
+
+
+        var storedBooks = JSON.parse(localStorage.getItem("savedBooks"));
+        console.log(storedBooks)
+
+        saveBookBtn.textContent = "Book Saved!";
+        saveBookBtn.classList.add("disabled");
         console.log("You clicked the save book button!");
 
         let saveBookData = {
@@ -208,6 +218,7 @@ let updateWithBookInfo = function(data) {
             coverImage: data.book.image,
             authorName: printedName,
             length: data.book.pages,
+            hasBeenRead: false,
         }
 
         console.log(saveBookData)
@@ -215,6 +226,8 @@ let updateWithBookInfo = function(data) {
         savedBooks.bookList.push(saveBookData)
 
         console.log(savedBooks.bookList)
+
+        
         
         localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
     });
