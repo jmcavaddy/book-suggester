@@ -191,10 +191,9 @@ let updateWithBookInfo = function(data) {
 
         // If it isn't, save it to localStorage and change button text to
         // "Book Saved!"
-
-        // Get the saved books from localStorage
-        savedBooks = {bookList: []};
-        localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
+        if (typeof !savedBooks === 'undefined') {
+            var savedBooks = JSON.parse(localStorage.getItem("savedBooks"));
+        }
 
         // Function to save book data to localStorage
         let saveBookToLocalStorage = function(data) {
@@ -211,7 +210,8 @@ let updateWithBookInfo = function(data) {
         }
 
         // If there are no saved books, save the current book to localStorage
-        if (savedBooks.bookList.length === 0) {
+        if (typeof savedBooks === 'undefined') {
+            savedBooks = {bookList: []};
             saveBookToLocalStorage(data);
             saveBookBtn.textContent = "Book Saved!";
             saveBookBtn.classList.add("disabled");
