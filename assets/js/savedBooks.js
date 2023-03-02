@@ -24,12 +24,5 @@ for (var i = 0; i < savedBooks.bookList.length; i++) {
 
 }
 
+localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
 
-// for (var i = 0; i < savedBooks.bookList.length; i++) {
-//     console.log(savedBooks.bookList[i].coverImage)
-//     savedBookCarousel.innerHTML = 
-//     `<a class="carousel-item" href="#${i+1}!"><img src="${savedBooks.bookList[i].coverImage}"></a>
-//     `
-// }
-
-    // 

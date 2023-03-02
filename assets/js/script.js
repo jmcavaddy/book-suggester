@@ -1,30 +1,14 @@
 // Global variables
 let suggestABook = document.querySelector('#suggest-a-book')
 let bookInfo = document.querySelector('#book-info')
-let savedBooks = {bookList:[]}
+// Initialize the savedBooks item in localStorage
+// localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
 
 // Header info for API request
 let headers = {
     "Content-Type": 'application/json',
     "Authorization": '49360_c784f12cbac11f2eac0f14fa3fe52485'
 }
-
-
-// Ideally, this would be a function that generates a random ISBN number
-// but I'm not sure how to only find ISBNs that are in the database without
-// tons of API hits/are actually books. 
-// So, I'm randomly selecting an ISBN number from a list of ISBNs that I know
-// are in the database/are actually books.
-
-// let genIsbn = function() {
-//     let isbn = '1'
-//     for (let i = 0; i < 9; i++) {
-//         isbn += Math.floor(Math.random() * 10)
-//     }
-//     return isbn
-// }
-
-// let randomIsbn = genIsbn()
 
 // For now, this is how I will generate a random ISBN number:
 
@@ -153,6 +137,7 @@ const randomIsbn = '9780395974681'
 let requestUrl = `https://api2.isbndb.com/book/${randomIsbn}`;
 // chooseRandomIsbn()
 
+// This function fetches the book info from the API
 let fetchBookInfo = function() {
     fetch(requestUrl, {headers: headers})
         .then(function (response) {
@@ -166,6 +151,7 @@ let fetchBookInfo = function() {
         });
 }
 
+// This function updates the page with the book info
 let updateWithBookInfo = function(data) {
     // Update the suggest a book button
     suggestABook.textContent = "Suggest Another Book!";
@@ -182,6 +168,7 @@ let updateWithBookInfo = function(data) {
     }
     let printedName = createPrintedName(data);
 
+    // Update the page with the book info and add a button to save the book
     bookInfo.innerHTML = 
         `<img class="book-details book-cover" src="${data.book.image}" alt="Book cover for ${data.book.title}">
         <h2>Try ${data.book.title},</h2>
@@ -196,44 +183,69 @@ let updateWithBookInfo = function(data) {
 
     `
 
+
+
     let saveBookBtn = document.querySelector('#save-book')
 
    
 
+    // Add an event listener to the save book button
     saveBookBtn.addEventListener("click", function() {
 
         // Check localStorage to see if this book is already saved
-        // If it is, don't save it again
+        // If it is, don't save it again and change button text to
+        // "Book has already been saved!"
 
+        // If it isn't, save it to localStorage and change button text to
+        // "Book Saved!"
 
-        var storedBooks = JSON.parse(localStorage.getItem("savedBooks"));
-        console.log(storedBooks)
+        // Get the saved books from localStorage
+        var savedBooks = JSON.parse(localStorage.getItem("savedBooks"));
 
-        saveBookBtn.textContent = "Book Saved!";
-        saveBookBtn.classList.add("disabled");
-        console.log("You clicked the save book button!");
+        // Function to save book data to localStorage
+        let saveBookToLocalStorage = function(data) {
 
-        let saveBookData = {
-            title: data.book.title,
-            coverImage: data.book.image,
-            authorName: printedName,
-            length: data.book.pages,
-            hasBeenRead: false,
+            let saveBookData = {
+                title: data.book.title,
+                coverImage: data.book.image,
+                authorName: printedName,
+            }
+
+            savedBooks.bookList.push(saveBookData)
+
+            localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
+
         }
 
-        console.log(saveBookData)
+        // If there are no saved books, save the current book to localStorage
+        if (savedBooks.bookList.length === 0) {
+            saveBookToLocalStorage(data);
+            saveBookBtn.textContent = "Book Saved!";
+            saveBookBtn.classList.add("disabled");
+            return;
+        } else {
+            // loop through the saved books to see if the current book is already saved
+            for (let i = 0; i < savedBooks.bookList.length; i++) {
+                if (savedBooks.bookList[i].title === data.book.title) {
+                    saveBookBtn.textContent = "Book has already been saved!";
+                    saveBookBtn.classList.add("disabled");
+                    return;
+                } else {
+                // If the book isn't already saved, save it to localStorage
+                    saveBookToLocalStorage(data);
+                    saveBookBtn.textContent = "Book Saved!";
+                    saveBookBtn.classList.add("disabled");
+                    return;
+                }
+            }
+        };
 
-        savedBooks.bookList.push(saveBookData)
-
-        console.log(savedBooks.bookList)
-
-        
-        
-        localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
     });
 
 }
 
 
+// This event listener runs the fetchBookInfo function when the user clicks the 
+// suggest a book button
 suggestABook.addEventListener("click",fetchBookInfo)
 
