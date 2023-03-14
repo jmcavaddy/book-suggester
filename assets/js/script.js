@@ -2,13 +2,26 @@
 let suggestABook = document.querySelector('#suggest-a-book')
 let bookInfo = document.querySelector('#book-info')
 
-// Initialize savedBooks
-
-var savedBooks = JSON.parse(localStorage.getItem("savedBooks"));
-
-if (typeof savedBooks === "undefined") {
-    localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
+// The following is a function that runs on page load
+// It will check if there is a savedBooks object in local storage
+// If there is, it will pull that object to display in the carousel
+// If there is not, it will create a new savedBooks object in local storage
+// and display a placeholder book in the carousel
+function init() {
+    let savedBooks = JSON.parse(localStorage.getItem("savedBooks"));
+    if (typeof savedBooks === null) {
+        savedBooks = {
+            bookList: [],
+        }
+        localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
+        return savedBooks;
+    }
+    else {
+        return savedBooks;
+    }
 }
+
+let savedBooks = init();
 
 
 // Header info for API request
@@ -192,6 +205,19 @@ let updateWithBookInfo = function(data) {
         // If it isn't, save it to localStorage and change button text to
         // "Book Saved!"
 
+        let createSavedBooks = function() {
+            if (localStorage.getItem("savedBooks") === null) {
+                return {
+                    bookList: []
+                }
+            } else {
+                return JSON.parse(localStorage.getItem("savedBooks"))
+            }
+        };
+
+        let savedBooks = createSavedBooks();
+        
+
         // Function to save book data to localStorage
         let saveBookToLocalStorage = function(data) {
             
@@ -208,7 +234,7 @@ let updateWithBookInfo = function(data) {
         }
 
         // If there are no saved books, save the current book to localStorage
-        if (savedBooks.bookList.length === 0) {
+        if (savedBooks.bookList.length === 0 || savedBooks.bookList === null) {
             saveBookToLocalStorage(data);
             saveBookBtn.textContent = "Book Saved!";
             saveBookBtn.classList.add("disabled");
