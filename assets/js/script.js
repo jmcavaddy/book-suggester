@@ -2,28 +2,6 @@
 let suggestABook = document.querySelector('#suggest-a-book')
 let bookInfo = document.querySelector('#book-info')
 
-// The following is a function that runs on page load
-// It will check if there is a savedBooks object in local storage
-// If there is, it will pull that object to display in the carousel
-// If there is not, it will create a new savedBooks object in local storage
-// and display a placeholder book in the carousel
-function init() {
-    let savedBooks = JSON.parse(localStorage.getItem("savedBooks"));
-    if (typeof savedBooks === null) {
-        savedBooks = {
-            bookList: [],
-        }
-        localStorage.setItem("savedBooks", JSON.stringify(savedBooks))
-        return savedBooks;
-    }
-    else {
-        return savedBooks;
-    }
-}
-
-let savedBooks = init();
-
-
 // Header info for API request
 let headers = {
     "Content-Type": 'application/json',
@@ -139,7 +117,7 @@ let RandomIsbn = [
     '9781846053443',
 ]
 
-// This function randomly selects an ISBN number from the list above
+// This function randomly selects an ISBN number from the randomIsbn array
 let chooseRandomIsbn = function() {
     let randomIsbn = RandomIsbn[Math.floor(Math.random() * RandomIsbn.length)]
     let requestUrl = `https://api2.isbndb.com/book/${randomIsbn}`
@@ -198,13 +176,8 @@ let updateWithBookInfo = function(data) {
     // Add an event listener to the save book button
     saveBookBtn.addEventListener("click", function() {
 
-        // Check localStorage to see if this book is already saved
-        // If it is, don't save it again and change button text to
-        // "Book has already been saved!"
-
-        // If it isn't, save it to localStorage and change button text to
-        // "Book Saved!"
-
+        // Function to create the savedBooks object in localStorage
+        // if it doesn't already exist.
         let createSavedBooks = function() {
             if (localStorage.getItem("savedBooks") === null) {
                 return {
